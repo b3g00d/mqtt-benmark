@@ -5,12 +5,6 @@ import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
-type Message struct {
-	ClientID string
-	Topic    string
-	Payload  string
-}
-
 type SubClient struct {
 	Broker   string
 	ClientID int
@@ -24,7 +18,7 @@ func onMessageReceived(client MQTT.Client, message MQTT.Message) {
 
 func (s *SubClient) Run() {
 	topic := fmt.Sprintf("topic/test/%d", s.ClientID)
-	client_id := fmt.Sprintf("client_%d", s.ClientID)
+	client_id := fmt.Sprintf("client_sub_%d", s.ClientID)
 	opts := MQTT.NewClientOptions().AddBroker(s.Broker)
 	opts.SetClientID(client_id)
 	opts.OnConnect = func(c MQTT.Client) {

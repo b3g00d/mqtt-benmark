@@ -17,7 +17,7 @@ func main() {
 		broker          = flag.String("broker", "tcp://localhost:1883", "MQTT broker endpoint as scheme://host:port")
 		client_type     = flag.String("client_type", "sub", "Client Type sub or pub")
 		client_id_range = flag.String("client_id_range", "0,10000", "client range")
-		qos      = flag.Int("qos", 1, "QoS for published messages")
+		qos             = flag.Int("qos", 1, "QoS for published messages")
 	)
 	flag.Parse()
 	fmt.Println(*broker)
@@ -34,7 +34,17 @@ func main() {
 			c := &SubClient{
 				ClientID: i,
 				Broker:   *broker,
-				Qos: *qos,
+				Qos:      *qos,
+			}
+			go c.Run()
+		}
+	} else {
+		for i := from; i < to; i++ {
+			waitgroup.Add(1)
+			c := &PubClient{
+				ClientID: i,
+				Broker:   *broker,
+				Qos:      *qos,
 			}
 			go c.Run()
 		}
